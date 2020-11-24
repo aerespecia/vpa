@@ -18,7 +18,7 @@ class CreateRentZestimatesTable extends Migration
             $table->string('id')->nullable();
             $table->string('property_id')->nullable();
             $table->dateTime('date_time')->nullable();
-            $table->decimal('rent_zestimate', 20, 4)->nullable();
+            $table->decimal('rent_zestimate', 30, 4)->nullable();
             $table->timestamps();
         });
     }

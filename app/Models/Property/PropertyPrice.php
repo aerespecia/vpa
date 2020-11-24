@@ -13,7 +13,8 @@ class PropertyPrice extends Model
         'id',
         'price_per_square_foot',
         'listing_price',
-        'original_listing_price'
+        'original_listing_price',
+        'purchase_price'
     ];
 
     public function propertySummary() {

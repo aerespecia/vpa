@@ -21,14 +21,14 @@ class CreateSoldsTable extends Migration
             $table->date('listing_date')->nullable();
             $table->integer('dom')->nullable();
             $table->integer('zip')->nullable();
-            $table->decimal('listing_price',20,4)->nullable();
-            $table->decimal('orig_listing_price',20,4)->nullable();
+            $table->decimal('listing_price',30,4)->nullable();
+            $table->decimal('orig_listing_price',30,4)->nullable();
             $table->integer('bedrooms')->nullable();
             $table->integer('bathrooms')->nullable();
             $table->decimal('square_footage')->nullable();
             $table->integer('year_built')->nullable();
-            $table->decimal('price_per_sq_ft',20,4)->nullable();
-            $table->decimal('lot_size_sq_ft',20,4)->nullable();
+            $table->decimal('price_per_sq_ft',30,4)->nullable();
+            $table->decimal('lot_size_sq_ft',30,4)->nullable();
             $table->text('marketing_remarks')->nullable();
             $table->string('idx')->nullable();
             $table->string('publish_to_internet')->nullable();

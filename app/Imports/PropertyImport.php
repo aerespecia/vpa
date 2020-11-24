@@ -31,6 +31,7 @@ class PropertyImport implements OnEachRow, WithHeadingRow
         $row      = $row->toArray();
 
         Log::info('Inserting row to database',$row);
+        Log::info('Row: ',$row);
 
         $zestimatesAPI = Http::get('https://api.bridgedataoutput.com/api/v2/zestimates', [
             'access_token' => '7713f293adb8ab1f60972ec2031e0005',

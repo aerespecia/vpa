@@ -19,8 +19,8 @@ class CreatePropertyDetailsTable extends Migration
             $table->string('property_id')->nullable();
             $table->integer('bed_room')->nullable();
             $table->integer('bath_room')->nullable();
-            $table->decimal('lot_size', 20, 4)->nullable();
-            $table->decimal('sq_ft', 20, 4)->nullable();
+            $table->decimal('lot_size', 30, 4)->nullable();
+            $table->decimal('sq_ft', 30, 4)->nullable();
             $table->timestamps();
         });
     }

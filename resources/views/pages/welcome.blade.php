@@ -92,7 +92,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						<div class="subheader gutter-b subheader-transparent mt-10" id="kt_subheader">
 							<div class="container d-flex flex-column">
 								<div class="d-flex align-items-sm-end flex-column flex-sm-row mb-5">
-									<h2 class="d-flex align-items-center text-dark mr-5 mb-0">Property List</h2>
+                                    <h2 class="d-flex align-items-center text-dark mr-5 mb-0">Property List</h2>
 								</div>
 							</div>
 						</div>
@@ -104,10 +104,17 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="container">
                                 <!--begin::Card-->
                                 <div class="card card-custom">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <a href="#" class="btn btn-primary" data-toggle="modal"  data-target="#newPropertyModal">
+                                                <i class="flaticon2-plus"></i>&nbsp;Add Property
+                                            </a>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
                                         <!--begin: Datatable-->
                                         <div class="table-responsive-sm">
-                                            <table class="table table-bordered table-hover table-checkable table-sm" id="propertyTable" >
+                                            <table class="table table-bordered table-hover table-checkable table-sm" id="propertyCalculationsTable" >
                                                 <thead>
                                                     <tr>
                                                         <th>Address</th>
@@ -116,7 +123,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                         <th>ARV (Zestimate)</th>
                                                         <th>Construction Cost</th>
                                                         <th>Closing Cost</th>
-                                                        <th>Total Estimated Costs</th>
+                                                        <th>Total Estimated Selling Costs</th>
                                                         <th>Estimated Net Proceeds</th>
                                                     </tr>
                                                 </thead>
@@ -128,15 +135,16 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </div>
                                 <!--end::Card-->
-								<div class="modal fade" id="exampleModalSizeXl" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalSizeXl" aria-hidden="true">
-									<div class="modal-dialog modal-xl" role="document">
+                                <!--begin::Modal-->
+								<div class="modal fade" id="newPropertyModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="newPropertyModal" aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
 										<div class="modal-content">
 											<div class="modal-header">
 												<!--begin::Item-->
 												<div class="d-flex align-items-center mb-1">
 													<!--begin::Text-->
 													<div class="d-flex flex-column font-weight-bold">
-														<h3 href="#" class="text-dark text-hover-primary mb-1">Property List</h3>
+														<h3 href="#" class="text-dark text-hover-primary mb-1">Add New Property</h3>
 													</div>
 													<!--end::Text-->
 												</div>
@@ -145,22 +153,53 @@ License: You must have a valid license purchased only from themeforest(the above
 												</button>
 											</div>
 											<div class="modal-body">
-												<!--begin::Card-->
-                                                <div class="card card-custom">
-                                                    <div class="card-body">
-                                                        <!--begin: Datatable-->
-                                                        <table class="table table-bordered table-hover table-checkable" id="propertyTable">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Property Address</th>
-                                                                    <th>Price</th>
-                                                                    <th>Sq ft</th>
-                                                                    <th>ARV</th>
-                                                                    <th>Listing Type</th>
-                                                                </tr>
-                                                            </thead>
-                                                        </table>
-                                                        <!--end: Datatable-->
+                                                <!--begin::Card-->
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="card card-custom gutter-b example example-compact">
+                                                            <!--begin::Form-->
+                                                            <form id="propertyForm" method="post" action="{{url('upload/store')}}" enctype="multipart/form-data">
+                                                                <div class="card-body">
+                                                                    <div class="form-group">
+                                                                        <label>Property Address</label>
+                                                                        <div class="input-group rounded bg-light">
+                                                                            <input type="text" id="propertyAddress" class="form-control h-45px" placeholder="Search...">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-group">
+                                                                                <label>Purchase Price</label>
+                                                                                <input type="number" class="form-control" id="price" placeholder="Enter Price" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-group">
+                                                                                <label>Square footage</label>
+                                                                                <input type="number" class="form-control" id="sqft" placeholder="Enter Sqft addition" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <div class="form-group">
+                                                                                <label>Zestimate</label>
+                                                                                <span class="text-muted font-size-xs">Data from <a href="https://www.zillow.com/" target = "_blank">Zillow</a></span>
+                                                                                <h6>$<span id="zestimateView"></span></h6>
+                                                                                <input type="hidden" id="zestimate"/>
+                                                                                <p class="font-size-sm">Rental: $<span id="rentalZestimate"></span></p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="separator separator-solid separator-border-4"></div>
+
+                                                                </div>
+                                                                <div class="card-footer">
+                                                                    <button type="reset" id="saveProperty" class="btn btn-primary mr-2" data-dismiss="modal">Save Property</button>
+                                                                </div>
+                                                            </form>
+                                                            <!--end::Form-->
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <!--end::Card-->
@@ -170,11 +209,11 @@ License: You must have a valid license purchased only from themeforest(the above
 											</div>
 										</div>
 									</div>
-                                </div>
-                                <!--end::Modal-->
+								</div>
+								<!--end::Modal-->
                                 <!--begin::Modal-->
 								<div class="modal fade" id="propertyInfoModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalSizeXl" aria-hidden="true">
-									<div class="modal-dialog modal-xl" role="document">
+									<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
 										<div class="modal-content">
 											<div class="modal-header">
 												<!--begin::Item-->
@@ -192,12 +231,12 @@ License: You must have a valid license purchased only from themeforest(the above
 											<div class="modal-body">
                                                 <!--begin::Card-->
                                                 <div class="row">
-                                                    <div class="col-lg-7">
+                                                    <div class="col-lg-5">
                                                         <!--begin::Card-->
                                                         <div class="card card-custom gutter-b example example-compact">
                                                             <div class="card-header">
                                                                 <div class="card-title">
-                                                                    <h3 class="card-label">Map View</h3>
+                                                                    <h3 class="card-label">Images</h3>
                                                                 </div>
                                                                 <div class="card-toolbar">
                                                                 </div>
@@ -208,180 +247,34 @@ License: You must have a valid license purchased only from themeforest(the above
                                                         </div>
                                                         <!--end::Card-->
                                                     </div>
-                                                    <div class="col-lg-5">
+                                                    <div class="col-lg-7">
                                                         <div class="card card-custom gutter-b example example-compact">
-                                                            <div class="card-header">
-                                                                <h3 class="card-title">Off Market Properties</h3>
-                                                                <div class="card-toolbar">
+                                                            <div class="card-body">
+                                                                <h1><span class="font-weight-boldest display-2">$123,234</span> <span class="text-muted font-size-xs">Data from <a href="https://www.zillow.com/" target = "_blank">Zillow</a></span></h1>
+                                                                <h6 class="font-weight-bold mt-2"><span id="bedrooms" class="font-weight-boldest">4</span> bd <span class="font-weight-lighter">&nbsp;|&nbsp;</span> <span id="bathrooms">3</span> ba <span class="font-weight-lighter">&nbsp;|&nbsp;</span> <span id="info_sq_ft">1,345</span> sqft</h6>
+                                                                <h5 class="mt-3 mb-5">P Sherman Wallaby Street</h5>
+                                                                <div class="separator separator-solid separator-border-4"></div>
+                                                                <h3 class="mt-5">Home Value</h3>
+                                                                <div class="card mt-5">
+                                                                    <form class="form">
+                                                                        <div class="card-body">
+                                                                            <h5 style="text-align:center;">Estimated Net Proceeds</h5>
+                                                                            <h1 style="text-align:center;" class="font-weight-boldest">$123,456</h1>
+
+                                                                            <div class="form-group mt-5">
+                                                                                <label class="font-size-h6">Est. Selling Price of your home</label>
+                                                                                <div class="col-xl-12">
+                                                                                    <div class="ion-range-slider">
+                                                                                        <input type="hidden" id="kt_slider_1" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
+
                                                             </div>
-                                                            <!--begin::Form-->
-                                                            <form id="propertyForm" method="post" action="{{url('upload/store')}}" enctype="multipart/form-data">
-
-                                                                <div class="card-body">
-                                                                    <div class="form-group">
-                                                                        <label>Property Address</label>
-                                                                        <div class="input-group rounded bg-light">
-                                                                            <input type="text" id="propertyAddress" class="form-control h-45px" placeholder="Search...">
-
-                                                                            <div class="input-group-append">
-                                                                                <button class="btn btn-primary btn-sm p-4" type="button" id="fillDetails">Fill Details</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Price</label>
-                                                                                <input type="number" class="form-control" id="price" placeholder="Enter Price" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Sqft addition</label>
-                                                                                <input type="number" class="form-control" id="sqftAddition" placeholder="Enter Sqft addition" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Sqft</label>
-                                                                                <input type="number" class="form-control" id="sqft" placeholder="Enter Sqft" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>ARV</label>
-                                                                                <input type="number" class="form-control" id="arv" placeholder="Enter ARV" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Lot Size</label>
-                                                                                <input type="number" class="form-control" id="lotSize" placeholder="Enter Lot Size" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Zestimate</label>
-                                                                                <span class="text-muted font-size-xs">Data from <a href="https://www.zillow.com/" target = "_blank">Zillow</a></span>
-                                                                                <h6>$<span id="zestimate"></span></h6>
-                                                                                <p class="font-size-sm">Rental: $<span id="rentalZestimate"></span></p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Listing Type</label>
-                                                                                <div class="radio-list">
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="1" name="listingType" checked>
-                                                                                    <span></span>Off Market</label>
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="2" name="listingType">
-                                                                                    <span></span>On Market</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Sources</label>
-                                                                                <div class="radio-list">
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="1" name="sources" checked>
-                                                                                    <span></span>Email</label>
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="2" name="sources">
-                                                                                    <span></span>Manual</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Link to source</label>
-                                                                        <input type="text" class="form-control" id="linkToSource" placeholder="Enter Link to source" />
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Level of Construction</label>
-                                                                                <div class="radio-list">
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="1" name="levelOfConstruction" checked>
-                                                                                    <span></span>Light</label>
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="2" name="levelOfConstruction">
-                                                                                    <span></span>Medium</label>
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="3" name="levelOfConstruction">
-                                                                                    <span></span>Heavy</label>
-                                                                                    <label class="radio">
-                                                                                    <input type="radio" value="4" name="levelOfConstruction">
-                                                                                    <span></span>Ground up</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Rehab Cost</label>
-                                                                                <input type="number" class="form-control" placeholder="Enter Rehab Cost" id="rehabCost"/>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label>Hold Time</label>
-                                                                                <input type="number" class="form-control" placeholder="Enter Hold Time" id="holdTime"/>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Seller's Name</label>
-                                                                                <input type="text" class="form-control" id="sellersName" placeholder="Enter Seller's Name" />
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label>Phone</label>
-                                                                                <input type="text" class="form-control" id="phone" placeholder="Enter Seller's Phone" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-group">
-                                                                                <label>Email</label>
-                                                                                <input type="text" class="form-control" placeholder="Enter Email" id="email"/>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="exampleTextarea">Description
-                                                                        </label>
-                                                                        <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="exampleTextarea">Notes
-                                                                        </label>
-                                                                        <textarea class="form-control" id="notes" rows="3" placeholder="Enter Notes"></textarea>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Upload photos</label>
-                                                                        <div class="col-sm-12">
-                                                                            <div class="dropzone dropzone-default dropzone-primary dz-clickable" id="kt_dropzone_2">
-                                                                                <div class="dropzone-msg dz-message needsclick">
-                                                                                    <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer">
-                                                                    <button type="reset" id="saveProperty" class="btn btn-primary mr-2">Save Property</button>
-                                                                </div>
-                                                            </form>
-                                                            <!--end::Form-->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -455,6 +348,9 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="{{url('assets/js/pages/vpa/properties.js')}}"></script>
         <script src="{{url('assets/js/pages/crud/file-upload/dropzonejs.js')}}"></script>
         <script src="{{url('assets/js/pages/features/maps/leaflet.js')}}"></script>
+        <script src="{{url('assets/js/pages/crud/forms/widgets/nouislider.js')}}"></script>
+
+		<script src="assets/js/pages/crud/forms/widgets/ion-range-slider.js"></script>
 		<!--end::Page Scripts-->
 	</body>
 	<!--end::Body-->

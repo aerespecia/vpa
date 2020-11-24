@@ -3,7 +3,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 
 
 	var initTable1 = function() {
-		var table = $('#propertyTable');
+		var table = $('#propertyCalculationsTable');
 
 
 		// begin first table
@@ -13,40 +13,44 @@ var KTDatatablesDataSourceAjaxServer = function() {
             processing: true,
 
 			ajax: {
-				url: 'property/all',
+				url: 'property/calculations',
 				type: 'GET',
 				data: {
 					// parameters for custom backend script demo
 					columnsDef: [
-						'Address', 'Bd', 'Bth', 'SqFt', 'LotSz',
-						'Year','Orig Price','List Price'],
+                        'Address', 'SqFt', 'Purchase Price','ARV (Zestimare)','Construction Cost',
+                        'Closing Cost', 'Total Estimated Selling Cost', 'Estimated Net Proceeds'
+                    ],
                 },
 			},
 			columns: [
 				{
-                    class: 'font-size-lg',
                     data: null,
                     render: function(data, type, ful, meta) {
-                        return '<span class="font-size-lg>'+ data.property_address+'</span>';
+                        return '<a type="button" data-toggle="modal"  data-target="#propertyInfoModal">'+ data.address+'</a>';
                     }
                 },
-				{data: 'price'},
-				{data: 'sqft'},
-                {data: 'arv'},
-                {
-                    data: null,
-                    render: function(data, type, full, meta) {
-                        var status = {
-                            1: {'title': 'Off Market', 'class': 'label-light-primary'},
-                            2: {'title': 'On Market', 'class': ' label-light-info'},
-                        };
-                        if (typeof status[data.listing_type] === 'undefined' || typeof status[data.listing_type] === null) {
-                            return data.listing_type;
-                        }
-                        return '<span class="label label-lg font-weight-bold' + status[data.listing_type].class +' label-inline">' +
-                                status[data.listing_type].title + '</span>';
-                    },
-                }
+                {data: 'sq_ft'},
+                {data: 'purchase_price'},
+				{data: 'zestimate'},
+                {data: 'construction_cost'},
+                {data: 'closing_cost'},
+                {data: 'total_estimated_selling_cost'},
+                {data: 'net_proceeds'}
+                // {
+                //     data: null,
+                //     render: function(data, type, full, meta) {
+                //         var status = {
+                //             1: {'title': 'Off Market', 'class': 'label-light-primary'},
+                //             2: {'title': 'On Market', 'class': ' label-light-info'},
+                //         };
+                //         if (typeof status[data.listing_type] === 'undefined' || typeof status[data.listing_type] === null) {
+                //             return data.listing_type;
+                //         }
+                //         return '<span class="label label-lg font-weight-bold' + status[data.listing_type].class +' label-inline">' +
+                //                 status[data.listing_type].title + '</span>';
+                //     },
+                // }
 			],
 		});
 	};
@@ -119,7 +123,13 @@ jQuery(function(){
                   };
 
                   toastr.success("New Property Saved!");
-                $('#propertyTable').DataTable().ajax.reload();
+                  $("#propertyAddress").val('');
+                  $("#price").val('');
+                  $("#sqft").val('');
+                  $("zestimate").val(0);
+                  $("#zestimateView").html('');
+                  $("#rentZestimate").html('');
+                $('#propertyCalculationsTable').DataTable().ajax.reload();
                 // $("#labelNoStudies").html(forecastInput['noStudyPerday']);
                 // $("#labelStudyGrowth").html(forecastInput['noStudyGrowthPercentage']);
                 // $("#labelMonthsForecast").html(forecastInput['noOfMonthsToForecast']);
@@ -141,7 +151,7 @@ jQuery(function(){
         });
     });
 
-    $("#fillDetails").on("click", function(e) {
+    $("#propertyAddress").on("keyup change", function(e) {
         $.ajax({
             type:"GET",
             url: "/property/zestimate",
@@ -150,7 +160,8 @@ jQuery(function(){
             },
             success: function (result){
                 console.log(result);
-                $("#zestimate").html(result.zestimate);
+                $("#zestimateView").html(result.zestimate);
+                $("#zestimate").val(result.zestimateRaw);
                 $("#rentalZestimate").html(result.rentalZestimate);
 
                 L.map('kt_leaflet_1').remove();

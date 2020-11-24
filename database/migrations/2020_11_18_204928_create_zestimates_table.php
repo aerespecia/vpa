@@ -18,7 +18,7 @@ class CreateZestimatesTable extends Migration
             $table->string('id')->nullable();
             $table->string('property_id')->nullable();
             $table->dateTime('date_time')->nullable();
-            $table->decimal('zestimate', 20, 4)->nullable();
+            $table->decimal('zestimate', 30, 4)->nullable();
             $table->timestamps();
         });
     }

@@ -26,11 +26,11 @@ class CreatePropertiesTable extends Migration
             $table->string('street_suffix')->nullable();
             $table->string('state')->nullable();
             $table->string('listing_date')->nullable();
-            $table->decimal('area', 20,4)->nullable();
+            $table->decimal('area', 30,4)->nullable();
             $table->string('district')->nullable();
             $table->string('apn')->nullable();
-            $table->decimal('longitude', 20,4)->nullable();
-            $table->decimal('latitude', 20,4)->nullable();
+            $table->decimal('longitude', 30,4)->nullable();
+            $table->decimal('latitude', 30,4)->nullable();
             $table->string('property_type_id')->nullable();
             $table->string('zestimate_id')->nullable();
             $table->string('corelogic_id')->nullable();

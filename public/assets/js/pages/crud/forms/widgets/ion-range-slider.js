@@ -1,11 +1,15 @@
 // Class definition
 
 var KTIONRangeSlider = function () {
-    
+
     // Private functions
     var demos = function () {
         // basic demo
-        $('#kt_slider_1').ionRangeSlider();
+        $('#kt_slider_1').ionRangeSlider({
+            min:100000,
+            max:150000,
+            from: 125000
+        });
 
         // min & max values
         $('#kt_slider_2').ionRangeSlider({
@@ -73,7 +77,7 @@ var KTIONRangeSlider = function () {
     return {
         // public functions
         init: function() {
-            demos(); 
+            demos();
         }
     };
 }();

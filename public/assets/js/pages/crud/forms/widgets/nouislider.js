@@ -59,6 +59,8 @@ var KTnoUiSliderDemos = function() {
         sliderInput.addEventListener('change', function(){
             slider.noUiSlider.set(this.value);
         });
+
+        alert('test');
     }
 
     var demo3 = function() {
