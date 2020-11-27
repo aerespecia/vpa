@@ -18,7 +18,7 @@ var KTDatatablesDataSourceAjaxServer = function() {
 				data: {
 					// parameters for custom backend script demo
 					columnsDef: [
-                        'Address', 'SqFt', 'Purchase Price','ARV (Zestimare)','Construction Cost',
+                        'Address', 'Purchase Price','ARV (Zestimare)','Construction Cost',
                         'Closing Cost', 'Total Estimated Selling Cost', 'Estimated Net Proceeds'
                     ],
                 },
@@ -30,13 +30,11 @@ var KTDatatablesDataSourceAjaxServer = function() {
                         return '<a type="button" data-toggle="modal" data-property-id="'+data.property_id+'" data-id="1" data-target="#propertyInfoModal">'+ data.address+'</a>';
                     }
                 },
-                {data: 'sq_ft'},
                 {data: 'purchase_price'},
+                {data: 'net_proceeds'},
 				{data: 'zestimate'},
-                {data: 'construction_cost'},
-                {data: 'closing_cost'},
                 {data: 'total_estimated_selling_cost'},
-                {data: 'net_proceeds'}
+
 			],
 		});
 	};
@@ -297,9 +295,13 @@ jQuery(function(){
         });
     });
 
+    $("#kt_slider_zestimate").on("change", function(e) {
+        $("#info_selling_price").text(numeral($(this).val()).format('$0,0.00'));
+        calculatePropertyCostAndNet();
+    });
+
     $('#kt_slider_construction_cost').on("change", function(e) {
         var construction_cost = $(this).val();
-
         if(construction_cost < 140) {
             $("#info_chosen_construction_type").html("Light");
             $("#chosen_construction_cost").val(1);
@@ -320,6 +322,33 @@ jQuery(function(){
         $("#info_construciton_cost_punit").html(numeral(construction_cost).format('$0,0.00'));
         calculatePropertyCostAndNet();
 
+    });
+
+    $("#info_agent_commission").on(" keyup change", function(e) {
+        var zestimate = parseFloat($("#kt_slider_zestimate").val());
+
+        calculatePropertyCostAndNet();
+    });
+    $("#info_agent_commission_percent").on(" keyup change", function(e) {
+        calculatePropertyCostAndNet();
+    });
+    $("#info_selling_concessions").on(" keyup change", function(e) {
+        calculatePropertyCostAndNet();
+    });
+    $("#info_selling_concessions_percent").on(" keyup change", function(e) {
+        calculatePropertyCostAndNet();
+    });
+    $("#info_closing_fees").on(" keyup change", function(e) {
+        calculatePropertyCostAndNet();
+    });
+    $("#info_closing_fees_percent").on(" keyup change", function(e) {
+        calculatePropertyCostAndNet();
+    });
+    $("#info_taxes").on(" keyup change", function(e) {
+        calculatePropertyCostAndNet();
+    });
+    $("#info_taxes_percent").on(" keyup change", function(e) {
+        calculatePropertyCostAndNet();
     });
 
     $("#propertyAddress").on("keyup change", function(e) {

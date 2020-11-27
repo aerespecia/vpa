@@ -118,13 +118,11 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <thead>
                                                     <tr>
                                                         <th>Address</th>
-                                                        <th>Sqft</th>
                                                         <th>Purchase Price</th>
-                                                        <th>ARV (Zestimate)</th>
-                                                        <th>Construction Cost</th>
-                                                        <th>Closing Cost</th>
-                                                        <th>Total Estimated Selling Costs</th>
                                                         <th>Estimated Net Proceeds</th>
+                                                        <th>ARV (Zestimate)</th>
+                                                        <th>Total Estimated Selling Costs</th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -231,6 +229,152 @@ License: You must have a valid license purchased only from themeforest(the above
 											<div class="modal-body">
                                                 <!--begin::Card-->
                                                 <div class="row">
+                                                    <div class="col-lg-7">
+                                                        <div class="card card-custom gutter-b example example-compact">
+                                                            <div class="card-body">
+                                                                <h1><span class="font-weight-boldest display-2" id="info_purchase_price"></span> </h1><input type="hidden" id="zestimate" value="0"/>
+                                                                <h6 class="font-weight-bold mt-2"><span id="info_bedrooms" class="font-weight-bold">4</span> bd <span class="font-weight-lighter">&nbsp;|&nbsp;</span> <span id="info_bathrooms" class="font-weight-bold">3</span> ba <span class="font-weight-lighter">&nbsp;|&nbsp;</span> <span id="info_sq_ft" class="font-weight-bold">1,345</span> sqft</h6><input type="hidden" id="sqft" value="0"/>
+                                                                <h5 class="mt-3 mb-5" id="info_address">P Sherman Wallaby Street</h5>
+                                                                <div class="separator separator-solid separator-border-4"></div>
+                                                                <h3 class="mt-5">Home Value</h3>
+                                                                <form class="form">
+                                                                    <h6 style="text-align:center;">Zestimate <span class="text-muted font-size-xs">Data from <a href="https://www.zillow.com/" target = "_blank">Zillow</a></span></h6>
+                                                                    <h3 style="text-align:center;" class="font-weight-bolder" id="info_zestimate">$123,456</h3><input type="hidden" id="purchase_price"/><br/>
+                                                                    <h5 style="text-align:center;">Estimated Net Proceeds</h5>
+                                                                    <h1 style="text-align:center;" class="font-weight-boldest" id="info_net_proceeds">$123,456</h1>
+
+                                                                    <div class="form-group mt-5">
+                                                                        <div class="col-xl-12">
+                                                                            <label class="font-size-h6 font-weight-bold">Est. Selling Price of your home&nbsp;(<span id="info_selling_price">$123,456</span>)</label>
+                                                                            <label style="float:right;" class="font-size-h6"></label>
+                                                                        </div>
+                                                                        <div class="col-xl-12">
+                                                                            <div class="ion-range-slider">
+                                                                                <input type="hidden" id="kt_slider_zestimate" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group mt-5">
+                                                                        <div class="col-xl-12">
+                                                                            <label class="font-size-h6 font-weight-bold">Construction cost ($<span id="info_construction_cost"></span> | <span class="font-size-lg">Cost per sq ft @<span id="info_construciton_cost_punit"></span>)</label>
+
+                                                                            <label style="float:right;" id="info_chosen_construction_type" class="label label-primary label-inline p-4 font-size-h6 font-weight-bold">In process</span>
+                                                                        </div>
+                                                                        <div class="col-xl-12 mt-5">
+                                                                            <div class="ion-range-slider">
+                                                                                <input type="hidden" id="kt_slider_construction_cost" />
+                                                                                <input type="hidden" id="chosen_construction_cost" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group mt-5">
+                                                                        <div class="col-xl-12">
+                                                                            <div class="accordion accordion-light accordion-toggle-arrow" id="accordionExample5">
+                                                                                <div class="card">
+                                                                                    <div class="card-header" id="headingOne5">
+                                                                                        <div class="card-title collapsed align-right" data-toggle="collapse" data-target="#collapseOne5" aria-expanded="false">
+                                                                                        Est. Closing Cost&nbsp;
+                                                                                        (<span id="info_closing_cost" style="float:right;">$123,456</span>)
+                                                                                    </div>
+
+                                                                                    </div>
+                                                                                    <div id="collapseOne5" class="collapse" data-parent="#accordionExample5" style="">
+                                                                                        <div class="card-body">
+                                                                                            <div class="form-group row">
+                                                                                                <label class="col-6 col-form-label">Agent Comission</label>
+                                                                                                <div class="col-4">
+                                                                                                    <div class="input-group">
+                                                                                                        <div class="input-group-prepend">
+                                                                                                            <span class="input-group-text">$</span>
+                                                                                                        </div>
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_agent_commission">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-2">
+                                                                                                    <div class="input-group">
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_agent_commission_percent">
+                                                                                                        <div class="input-group-append">
+                                                                                                            <span class="input-group-text">%</span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group row">
+                                                                                                <label for="example-search-input" class="col-6 col-form-label">Selling Concessions</label>
+                                                                                                <div class="col-4">
+                                                                                                    <div class="input-group">
+                                                                                                        <div class="input-group-prepend">
+                                                                                                            <span class="input-group-text">$</span>
+                                                                                                        </div>
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_selling_concessions">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-2">
+                                                                                                    <div class="input-group">
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_selling_concessions_percent">
+                                                                                                        <div class="input-group-append">
+                                                                                                            <span class="input-group-text">%</span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group row">
+                                                                                                <label for="example-email-input" class="col-6 col-form-label">Closing Fees</label>
+                                                                                                <div class="col-4">
+                                                                                                    <div class="input-group">
+                                                                                                        <div class="input-group-prepend">
+                                                                                                            <span class="input-group-text">$</span>
+                                                                                                        </div>
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_closing_fees">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-2">
+                                                                                                    <div class="input-group">
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_closing_fees_percent">
+                                                                                                        <div class="input-group-append">
+                                                                                                            <span class="input-group-text">%</span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group row">
+                                                                                                <label for="example-url-input" class="col-6 col-form-label">Taxes</label>
+                                                                                                <div class="col-4">
+                                                                                                    <div class="input-group">
+                                                                                                        <div class="input-group-prepend">
+                                                                                                            <span class="input-group-text">$</span>
+                                                                                                        </div>
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_taxes">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-2">
+                                                                                                    <div class="input-group">
+                                                                                                        <input class="form-control numeral-input text-right" type="text" value="" id="info_taxes_percent">
+                                                                                                        <div class="input-group-append">
+                                                                                                            <span class="input-group-text">%</span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="separator separator-solid separator-border-4"></div>
+                                                                    <div class="form-group mt-5">
+                                                                        <div>
+                                                                            <label class="font-size-h4 font-weight-bolder">Est. Selling Cost of your home</label>
+                                                                            <label style="float:right;" class="font-size-h4 font-weight-bolder" id="info_selling_cost">$123,456</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-lg-5">
                                                         <!--begin::Card-->
                                                         <div class="card card-custom gutter-b example example-compact">
@@ -247,156 +391,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                         </div>
                                                         <!--end::Card-->
                                                     </div>
-                                                    <div class="col-lg-7">
-                                                        <div class="card card-custom gutter-b example example-compact">
-                                                            <div class="card-body">
-                                                                <h1><span class="font-weight-boldest display-2" id="info_zestimate"></span> <span class="text-muted font-size-xs">Data from <a href="https://www.zillow.com/" target = "_blank">Zillow</a></span></h1><input type="hidden" id="zestimate" value="0"/>
-                                                                <h6 class="font-weight-bold mt-2"><span id="info_bedrooms" class="font-weight-bold">4</span> bd <span class="font-weight-lighter">&nbsp;|&nbsp;</span> <span id="info_bathrooms" class="font-weight-bold">3</span> ba <span class="font-weight-lighter">&nbsp;|&nbsp;</span> <span id="info_sq_ft" class="font-weight-bold">1,345</span> sqft</h6><input type="hidden" id="sqft" value="0"/>
-                                                                <h5 class="mt-3 mb-5" id="info_address">P Sherman Wallaby Street</h5>
-                                                                <div class="separator separator-solid separator-border-4"></div>
-                                                                <h3 class="mt-5">Home Value</h3>
-                                                                <div class="card mt-5">
-                                                                    <form class="form">
-                                                                        <div class="card-body">
-                                                                            <h6 style="text-align:center;">Purchase Price</h6>
-                                                                            <h3 style="text-align:center;" class="font-weight-bolder" id="info_purchase_price">$123,456</h3><input type="hidden" id="purchase_price"/><br/>
-                                                                            <h5 style="text-align:center;">Estimated Net Proceeds</h5>
-                                                                            <h1 style="text-align:center;" class="font-weight-boldest" id="info_net_proceeds">$123,456</h1>
 
-                                                                            <div class="form-group mt-5">
-                                                                                <div class="col-xl-12">
-                                                                                    <label class="font-size-h6 font-weight-bold">Est. Selling Price of your home&nbsp;(<span id="info_selling_price">$123,456</span>)</label>
-                                                                                    <label style="float:right;" class="font-size-h6"></label>
-                                                                                </div>
-                                                                                <div class="col-xl-12">
-                                                                                    <div class="ion-range-slider">
-                                                                                        <input type="hidden" id="kt_slider_zestimate" />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group mt-5">
-                                                                                <div class="col-xl-12">
-                                                                                    <label class="font-size-h6 font-weight-bold">Construction cost ($<span id="info_construction_cost"></span> @<span id="info_construciton_cost_punit"></span>)</label>
-
-                                                                                    <label style="float:right;" id="info_chosen_construction_type" class="label label-primary label-inline p-4 font-size-h6 font-weight-bold">In process</span>
-                                                                                </div>
-                                                                                <div class="col-xl-12 mt-5">
-                                                                                    <div class="ion-range-slider">
-                                                                                        <input type="hidden" id="kt_slider_construction_cost" />
-                                                                                        <input type="hidden" id="chosen_construction_cost" />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group mt-5">
-                                                                                <div class="col-xl-12">
-                                                                                    <div class="accordion accordion-light accordion-toggle-arrow" id="accordionExample5">
-                                                                                        <div class="card">
-                                                                                            <div class="card-header" id="headingOne5">
-                                                                                                <div class="card-title collapsed align-right" data-toggle="collapse" data-target="#collapseOne5" aria-expanded="false">
-                                                                                                Est. Closing Cost&nbsp;
-                                                                                                (<span id="info_closing_cost" style="float:right;">$123,456</span>)
-                                                                                            </div>
-
-                                                                                            </div>
-                                                                                            <div id="collapseOne5" class="collapse" data-parent="#accordionExample5" style="">
-                                                                                                <div class="card-body">
-                                                                                                    <div class="form-group row">
-                                                                                                        <label class="col-6 col-form-label">Agent Comission</label>
-                                                                                                        <div class="col-4">
-                                                                                                            <div class="input-group">
-                                                                                                                <div class="input-group-prepend">
-                                                                                                                    <span class="input-group-text">$</span>
-                                                                                                                </div>
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_agent_commission">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-2">
-                                                                                                            <div class="input-group">
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_agent_commission_percent">
-                                                                                                                <div class="input-group-append">
-                                                                                                                    <span class="input-group-text">%</span>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="form-group row">
-                                                                                                        <label for="example-search-input" class="col-6 col-form-label">Selling Concessions</label>
-                                                                                                        <div class="col-4">
-                                                                                                            <div class="input-group">
-                                                                                                                <div class="input-group-prepend">
-                                                                                                                    <span class="input-group-text">$</span>
-                                                                                                                </div>
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_selling_concessions">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-2">
-                                                                                                            <div class="input-group">
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_selling_concessions_percent">
-                                                                                                                <div class="input-group-append">
-                                                                                                                    <span class="input-group-text">%</span>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="form-group row">
-                                                                                                        <label for="example-email-input" class="col-6 col-form-label">Closing Fees</label>
-                                                                                                        <div class="col-4">
-                                                                                                            <div class="input-group">
-                                                                                                                <div class="input-group-prepend">
-                                                                                                                    <span class="input-group-text">$</span>
-                                                                                                                </div>
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_closing_fees">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-2">
-                                                                                                            <div class="input-group">
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_closing_fees_percent">
-                                                                                                                <div class="input-group-append">
-                                                                                                                    <span class="input-group-text">%</span>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="form-group row">
-                                                                                                        <label for="example-url-input" class="col-6 col-form-label">Taxes</label>
-                                                                                                        <div class="col-4">
-                                                                                                            <div class="input-group">
-                                                                                                                <div class="input-group-prepend">
-                                                                                                                    <span class="input-group-text">$</span>
-                                                                                                                </div>
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_taxes">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-2">
-                                                                                                            <div class="input-group">
-                                                                                                                <input class="form-control numeral-input text-right" type="text" value="" id="info_taxes_percent">
-                                                                                                                <div class="input-group-append">
-                                                                                                                    <span class="input-group-text">%</span>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="separator separator-solid separator-border-4"></div>
-                                                                            <div class="form-group mt-5">
-                                                                                <div>
-                                                                                    <label class="font-size-h4 font-weight-bolder">Est. Selling Cost of your home</label>
-                                                                                    <label style="float:right;" class="font-size-h4 font-weight-bolder" id="info_selling_cost">$123,456</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <!--end::Card-->
 											</div>
