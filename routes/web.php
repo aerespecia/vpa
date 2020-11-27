@@ -42,6 +42,7 @@ Route::get('/forms/rental', function () {
 Route::get('property/zestimate', [PropertyController::class, 'getZestimate']);
 Route::get('property/all', [PropertyController::class, 'all']);
 Route::get('property/import', [PropertyController::class, 'import']);
+Route::get('property/calculation/{id}', [PropertyController::class, 'propertyCalculation']);
 Route::get('property/calculations', [PropertyController::class, 'calculationSummary']);
 Route::resource('property', PropertyController::class);
 

@@ -5,18 +5,18 @@ var KTIONRangeSlider = function () {
     // Private functions
     var demos = function () {
         // basic demo
-        $('#kt_slider_1').ionRangeSlider({
-            min:100000,
-            max:150000,
-            from: 125000
-        });
+        // $('#kt_slider_1').ionRangeSlider({
+        //     min:100000,
+        //     max:150000,
+        //     from: 125000
+        // });
 
-        // min & max values
-        $('#kt_slider_2').ionRangeSlider({
-            min: 100,
-            max: 1000,
-            from: 550
-        });
+        // // min & max values
+        // $('#kt_slider_2').ionRangeSlider({
+        //     min: 50,
+        //     max: 350,
+        //     from: 550
+        // });
 
         // custom prefix
         $('#kt_slider_3').ionRangeSlider({

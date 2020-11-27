@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Property\Property;
-use App\Models\Property\PropertyDetail;
-use App\Models\Property\PropertyPrice;
-use App\Models\Property\PropertySummary;
 use App\Models\Setting;
 use App\Models\Calculation;
-use App\Models\Zestimate\Zestimate;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Imports\PropertyImport;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Log;
+use App\Models\PropertySetting;
+use App\Models\Property\Property;
 use Illuminate\Support\Facades\DB;
+use App\Models\Zestimate\Zestimate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Property\PropertyType;
+use App\Models\Property\PropertyPrice;
+use App\Models\Property\PropertyDetail;
+use App\Models\Property\PropertySummary;
 
 class PropertyController extends Controller
 {
@@ -51,7 +53,7 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
         $inputs = $request->all();
         $property = new Property();
         $property->address = $inputs["propertyAddress"];
@@ -86,25 +88,22 @@ class PropertyController extends Controller
             $taxes = $settings->taxes * $zestimate;
 
             $closingCost = $agentCommission + $sellingConcession + $closingFees + $taxes;
-
-            $construction_light = $settings->chosen_construction_cost == 1 ?
-                $settings->construction_light * $inputs["sqft"] : 0;
-            $construction_medium = $settings->chosen_construction_cost == 2 ?
-                $settings->construction_medium * $inputs["sqft"] : 0;
-            $construction_heavy = $settings->chosen_construction_cost == 3 ?
-                $settings->construction_heavy * $inputs["sqft"] : 0;
-            $construction_groundup = $settings->chosen_construction_cost == 4 ?
-                $settings->construction_groundup * $inputs["sqft"] : 0;
-
             $constructionCost = 0;
-            if($construction_light > 0)
-                $constructionCost = $construction_light;
-            if($construction_medium > 0)
-                $constructionCost = $construction_medium;
-            if($construction_heavy > 0)
-                $constructionCost = $construction_heavy;
-            if($construction_groundup > 0)
-                $constructionCost = $construction_groundup;
+
+            switch ($settings->chosen_construction_cost) {
+                case 1:
+                    $constructionCost = $settings->construction_light * $inputs["sqft"];
+                    break;
+                case 2:
+                    $settings->construction_medium * $inputs["sqft"];
+                    break;
+                case 3:
+                    $settings->construction_heavy * $inputs["sqft"];
+                    break;
+                case 4:
+                    $settings->construction_groundup * $inputs["sqft"];
+                    break;
+            }
 
             $totalEstimatedSellingCost = $constructionCost + $closingCost;
             $netProceeds = $zestimate - ($totalEstimatedSellingCost + $inputs["price"]);
@@ -115,6 +114,20 @@ class PropertyController extends Controller
             $calculation->net_proceeds = $netProceeds;
             $calculation->property_id = $property->id;
             $calculation->save();
+
+            $property->propertySetting()->firstOrCreate([
+                'agent_commission' => $settings->agent_commission,
+                'selling_concession' => $settings->selling_concession,
+                'closing_fees' => $settings->closing_fees,
+                'taxes' => $settings->taxes,
+                'construction_light' => $settings->construction_light,
+                'construction_medium' => $settings->construction_medium,
+                'construction_heavy' =>  $settings->construction_heavy,
+                'construction_groundup' => $settings->construction_groundup,
+                'chosen_construction_cost' => $settings->chosen_construction_cost
+            ]);
+
+
         }
 
 
@@ -193,14 +206,15 @@ class PropertyController extends Controller
     public function calculationSummary()
     {
         $properties = Property::select([
+                            'properties._id as property_id',
                             'properties.address',
-                            DB::raw('FORMAT(pd.sq_ft,0) as sq_ft'),
-                            DB::raw('FORMAT(pp.purchase_price,2) as purchase_price'),
-                            DB::raw('FORMAT(z.zestimate,2) as zestimate'),
-                            DB::raw('FORMAT(c.construction_cost,2) as construction_cost'),
-                            DB::raw('FORMAT(c.closing_cost,2) as closing_cost'),
-                            DB::raw('FORMAT(c.total_estimated_selling_cost,2) as total_estimated_selling_cost'),
-                            DB::raw('FORMAT(c.net_proceeds,2) as net_proceeds')
+                            DB::raw('pd.sq_ft as sq_ft'),
+                            DB::raw('pp.purchase_price as purchase_price'),
+                            DB::raw('z.zestimate as zestimate'),
+                            DB::raw('c.construction_cost as construction_cost'),
+                            DB::raw('c.closing_cost as closing_cost'),
+                            DB::raw('c.total_estimated_selling_cost as total_estimated_selling_cost'),
+                            DB::raw('c.net_proceeds as net_proceeds'),
                         ])
                         ->join('property_details as pd','pd.property_id','=','properties._id')
                         ->leftjoin('calculations as c','c.property_id','=','properties._id')
@@ -214,6 +228,49 @@ class PropertyController extends Controller
             "iTotalDisplayRecords"=>count($properties),
             "data"=>$properties
         ]);
+    }
+
+    /**
+     * Get property calculation
+     */
+    public function propertyCalculation($id)
+    {
+        $propertyCalculation = Property::select([
+                            'properties._id as property_id',
+                            'properties.address',
+                            'pd.bed_room',
+                            'pd.bath_room',
+                            DB::raw('pd.sq_ft as sq_ft'),
+                            DB::raw('pp.purchase_price as purchase_price'),
+                            DB::raw('z.zestimate as zestimate'),
+                            DB::raw('c.construction_cost as construction_cost'),
+                            DB::raw('c.closing_cost as closing_cost'),
+                            DB::raw('c.total_estimated_selling_cost as total_estimated_selling_cost'),
+                            DB::raw('c.net_proceeds as net_proceeds'),
+                            DB::raw('pset.agent_commission as agent_commision_pct'),
+                            DB::raw('pset.agent_commission * z.zestimate as agent_commision_amount'),
+                            DB::raw('pset.selling_concession as selling_concession_pct'),
+                            DB::raw('pset.selling_concession * z.zestimate as selling_concession_amount'),
+                            DB::raw('pset.closing_fees as closing_fees_pct'),
+                            DB::raw('pset.closing_fees * z.zestimate as closing_fees_amount'),
+                            DB::raw('pset.taxes as taxes_pct'),
+                            DB::raw('pset.taxes * z.zestimate as taxes_amount'),
+                            DB::raw('pset.chosen_construction_cost'),
+                            DB::raw('pset.construction_light'),
+                            DB::raw('pset.construction_medium'),
+                            DB::raw('pset.construction_heavy'),
+                            DB::raw('pset.construction_groundup'),
+                        ])
+                        ->join('property_details as pd','pd.property_id','=','properties._id')
+                        ->leftjoin('calculations as c','c.property_id','=','properties._id')
+                        ->join('zestimates as z','z.property_id','=','properties._id')
+                        ->join('property_summaries as ps','ps.property_id','=','properties._id')
+                        ->join('property_prices as pp','pp._id','=','ps.property_price_id')
+                        ->join('property_settings as pset','pset.property_id','=','properties._id')
+                        ->where('properties._id','=',$id)
+                        ->first();
+
+        return $propertyCalculation;
     }
 
     /**

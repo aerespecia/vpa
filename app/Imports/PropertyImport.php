@@ -115,24 +115,22 @@ class PropertyImport implements OnEachRow, WithHeadingRow
 
             $closingCost = $agentCommission + $sellingConcession + $closingFees + $taxes;
 
-            $construction_light = $settings->chosen_construction_cost == 1 ?
-                $settings->construction_light * $row['square_footage'] : 0;
-            $construction_medium = $settings->chosen_construction_cost == 2 ?
-                $settings->construction_medium * $row['square_footage'] : 0;
-            $construction_heavy = $settings->chosen_construction_cost == 3 ?
-                $settings->construction_heavy * $row['square_footage'] : 0;
-            $construction_groundup = $settings->chosen_construction_cost == 4 ?
-                $settings->construction_groundup * $row['square_footage'] : 0;
 
             $constructionCost = 0;
-            if($construction_light > 0)
-                $constructionCost = $construction_light;
-            if($construction_medium > 0)
-                $constructionCost = $construction_medium;
-            if($construction_heavy > 0)
-                $constructionCost = $construction_heavy;
-            if($construction_groundup > 0)
-                $constructionCost = $construction_groundup;
+            switch ($settings->chosen_construction_cost) {
+                case 1:
+                    $constructionCost = $settings->construction_light * $row["sqft"];
+                    break;
+                case 2:
+                    $settings->construction_medium * $row["sqft"];
+                    break;
+                case 3:
+                    $settings->construction_heavy * $row["sqft"];
+                    break;
+                case 4:
+                    $settings->construction_groundup * $row["sqft"];
+                    break;
+            }
 
             $totalEstimatedSellingCost = $constructionCost + $closingCost;
             $netProceeds = $zestimate - ($totalEstimatedSellingCost + $row['purchase_price']);
@@ -143,6 +141,18 @@ class PropertyImport implements OnEachRow, WithHeadingRow
             $calculation->net_proceeds = $netProceeds;
             $calculation->property_id = $property->id;
             $calculation->save();
+
+            $property->propertySetting()->firstOrCreate([
+                'agent_commission' => $settings->agent_commission,
+                'selling_concession' => $settings->selling_concession,
+                'closing_fees' => $settings->closing_fees,
+                'taxes' => $settings->taxes,
+                'construction_light' => $settings->construction_light,
+                'construction_medium' => $settings->construction_medium,
+                'construction_heavy' =>  $settings->construction_heavy,
+                'construction_groundup' => $settings->construction_groundup,
+                'chosen_construction_cost' => $settings->chosen_construction_cost
+            ]);
         }
     }
 
